@@ -2,7 +2,7 @@ const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
-const { Spot, SpotImage, Review } = require('../../db/models');
+const { Spot, SpotImage, Review, Booking } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -45,6 +45,12 @@ const validateReview = [
    check('address')
       .exists({ checkFalsy: true })
       .withMessage('Stars must be an integer from 1 to 5')
+];
+
+const validateBooking = [
+   check('endDate')
+      .exists({ checkFalsy: true })
+      .withMessage('endDate cannot be on or before startDate')
 ];
 
 router.get('', async (req, res) => {
@@ -246,6 +252,56 @@ router.get('/:spotId/reviews', async (req, res) => {
       }
    })
    res.json(reviews)
+})
+
+router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res) => {
+   const userId = req.user.id;
+   const spot = await Spot.findByPk(req.params.spotId);
+   const { startDate, endDate } = req.body;
+   if (!spot) {
+      res.status(404);
+      res.json({
+         "message": "Spot couldn't be found"
+      })
+   }
+   // const bookingPerSpot = await Booking.findOne({
+   //    where: {
+   //       spotId: spot.id,
+
+   //    }
+   // })
+   if (spot.ownerId !== userId) {
+      const booking = await Booking.create({
+         spotId: spot.id,
+         userId: userId,
+         startDate: startDate,
+         endDate: endDate
+      })
+      booking.save();
+      res.json(booking);
+   } else {
+      res.status(401);
+      res.json({
+         "message": "Cannot book your owned spot"
+      })
+   }
+})
+
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+   const userId = req.user.id;
+   const spot = await Spot.findByPk(req.params.spotId);
+   if (!spot) {
+      res.status(404);
+      res.json({
+         "message": "Spot couldn't be found"
+      })
+   }
+   const bookings = await Booking.findAll({
+      where: {
+         spotId: req.params.spotId
+      }
+   })
+   res.json(bookings)
 })
 
 module.exports = router;
