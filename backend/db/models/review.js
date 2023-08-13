@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Review.belongsTo(
-        models.User,
-        {
-          foreignKey: 'ownerId'
-        }
-      );
+      // Review.belongsTo(
+      //   models.User,
+      //   {
+      //     foreignKey: 'ownerId'
+      //   }
+      // );
       Review.belongsTo(
         models.Spot,
         {
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         models.ReviewImage,
         {
           foreignKey: 'reviewId',
-          onDelete: 'CASCADE',
+          // onDelete: 'CASCADE',
           hooks: true
         }
       );
