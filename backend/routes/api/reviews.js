@@ -120,13 +120,16 @@ router.post('/:reviewId/images', requireAuth, async (req, res) => {
             url: url
          })
          await reviewImage.save()
-         const newImg = await ReviewImage.findOne({
-            attributes: ['id', 'url'],
-            where: {
-               id: review.id
-            }
+         // const newImg = await ReviewImage.findOne({
+         //    attributes: ['id', 'url'],
+         //    where: {
+         //       id: review.id
+         //    }
+         // })
+         res.json({
+            "id": reviewImage.id,
+            "url": reviewImage.url
          })
-         res.json(newImg)
       } else {
          res.status(403);
          res.json({
