@@ -2,7 +2,7 @@ const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
-const { Booking, Spot } = require('../../db/models');
+const { Booking, Spot, SpotImage } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -14,14 +14,38 @@ const validateBooking = [
 ];
 
 router.get('/current', requireAuth, async (req, res) => {
+   const bookingsObj = { 'Bookings': [] }
    const userId = req.user.id;
    const userBookings = await Booking.findAll({
       where: {
          userId: userId
       }
    })
+   for (let booking of userBookings) {
+      const jsonBooking = booking.toJSON()
+      const spot = await Spot.findOne({
+         where: {
+            id: jsonBooking.spotId
+         },
+         attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
+      })
+      const jsonSpot = spot.toJSON()
+      const previewImages = await SpotImage.findAll({
+         spotId: jsonBooking.spotId
+      })
+      for (let img of previewImages) {
+         const jsonImg = img.toJSON()
+         if (jsonImg.preview == true) {
+            jsonSpot.previewImage = jsonImg.url
+         } else {
+            jsonSpot.previewImage = "Preview Image Unavailable"
+         }
+      }
+      jsonBooking.Spot = jsonSpot;
+      bookingsObj.Bookings.push(jsonBooking)
+   }
 
-   res.json(userBookings)
+   res.json(bookingsObj)
 })
 
 router.put('/:bookingId', requireAuth, validateBooking, async (req, res) => {

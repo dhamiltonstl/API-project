@@ -2,7 +2,7 @@ const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const router = express.Router();
 
-const { Spot, SpotImage, Review, Booking } = require('../../db/models');
+const { User, Spot, SpotImage, Review, ReviewImage, Booking } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -59,30 +59,140 @@ const validateBooking = [
 ];
 
 router.get('', async (req, res) => {
-   const spots = await Spot.findAll()
+   const spotsList = { 'Spots': [] }
+   const spots = await Spot.findAll({
+      include: [
+         {
+            model: Review
+         },
+         {
+            model: SpotImage
+         }
+      ]
+   })
+   for (let spot of spots) {
+      const jsonSpot = spot.toJSON()
 
-   res.json(spots)
+      let count = 0
+      for (let review of jsonSpot.Reviews) {
+         count += review.stars
+      }
+      let avg = count / jsonSpot.Reviews.length;
+      jsonSpot.avgRating = Number.parseFloat(avg).toFixed(1)
+      delete jsonSpot.Reviews
+
+      if (jsonSpot.SpotImages) {
+         for (let image of jsonSpot.SpotImages) {
+            if (image.preview == true) {
+               jsonSpot.previewImage = image.url
+            }
+         }
+         if (!jsonSpot.previewImage) {
+            jsonSpot.previewImage = "Preview Image Unavailable"
+         }
+      }
+      delete jsonSpot.SpotImages
+
+      spotsList.Spots.push(jsonSpot)
+   }
+
+   res.json(spotsList)
 })
 
 router.get('/current', requireAuth, async (req, res) => {
+   const spotsList = { 'Spots': [] }
    const userId = req.user.id
    const spots = await Spot.findAll({
       where: {
          ownerId: userId
-      }
+      },
+      include: [
+         {
+            model: Review
+         },
+         {
+            model: SpotImage
+         }
+      ]
    });
-   res.json(spots)
+   for (let spot of spots) {
+      const jsonSpot = spot.toJSON()
+
+      let count = 0
+      for (let review of jsonSpot.Reviews) {
+         count += review.stars
+      }
+      let avg = count / jsonSpot.Reviews.length;
+      jsonSpot.avgRating = Number.parseFloat(avg).toFixed(1)
+      delete jsonSpot.Reviews
+
+      if (jsonSpot.SpotImages) {
+         for (let image of jsonSpot.SpotImages) {
+            if (image.preview == true) {
+               jsonSpot.previewImage = image.url
+            }
+         }
+         if (!jsonSpot.previewImage) {
+            jsonSpot.previewImage = "Preview Image Unavailable"
+         }
+      }
+      delete jsonSpot.SpotImages
+
+      spotsList.Spots.push(jsonSpot)
+   }
+
+   res.json(spotsList)
 });
 
 router.get('/:spotId', async (req, res) => {
-   const spot = await Spot.findByPk(req.params.spotId);
+   const spot = await Spot.findOne({
+      where: {
+         id: req.params.spotId
+      },
+      include: [
+         {
+            model: Review
+         },
+         {
+            model: SpotImage,
+            attributes: [
+               'id',
+               'url',
+               'preview'
+            ]
+         }
+      ]
+   });
    if (!spot) {
       res.status(404)
       res.json({
          "message": "Spot couldn't be found"
       })
    }
-   res.json(spot)
+   const jsonSpot = spot.toJSON()
+
+   let count = 0
+   for (let review of jsonSpot.Reviews) {
+      count += review.stars
+   }
+   let avg = count / jsonSpot.Reviews.length;
+   jsonSpot.numReviews = jsonSpot.Reviews.length;
+   jsonSpot.avgRating = Number.parseFloat(avg).toFixed(1)
+   delete jsonSpot.Reviews;
+
+   const owner = await User.findOne({
+      where: {
+         id: jsonSpot.ownerId
+      },
+      attributes: [
+         'id',
+         'firstName',
+         'lastName'
+      ]
+   })
+   jsonSpot.Owner = owner;
+
+   res.json(jsonSpot)
 })
 
 router.post('', requireAuth, validateSpot, async (req, res) => {
@@ -251,12 +361,32 @@ router.get('/:spotId/reviews', async (req, res) => {
       })
    }
 
+   const reviewObj = { 'Reviews': [] }
    const reviews = await Review.findAll({
       where: {
          spotId: req.params.spotId
       }
    })
-   res.json(reviews)
+   for (let review of reviews) {
+      const jsonReview = review.toJSON()
+      const user = await User.findOne({
+         where: {
+            id: jsonReview.userId
+         },
+         attributes: ['id', 'firstName', 'lastName']
+      })
+      const reviewImages = await ReviewImage.findAll({
+         where: {
+            reviewId: jsonReview.id
+         },
+         attributes: ['id', 'url']
+      })
+      jsonReview.User = user;
+      jsonReview.ReviewImages = reviewImages
+      reviewObj.Reviews.push(jsonReview)
+   }
+
+   res.json(reviewObj)
 })
 
 router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res) => {
@@ -313,6 +443,7 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res) 
 })
 
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+   const bookingObj = { 'Bookings': [] }
    const userId = req.user.id;
    const spot = await Spot.findByPk(req.params.spotId);
    if (!spot) {
@@ -326,7 +457,29 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
          spotId: req.params.spotId
       }
    })
-   res.json(bookings)
+   if (userId == spot.ownerId) {
+      for (let booking of bookings) {
+         const jsonBooking = booking.toJSON()
+         const user = await User.findOne({
+            where: {
+               id: jsonBooking.userId
+            },
+            attributes: ['id', 'firstName', 'lastName']
+         })
+         jsonBooking.User = user;
+         bookingObj.Bookings.push(jsonBooking)
+      }
+   } else {
+      const altBookings = await Booking.findAll({
+         where: {
+            spotId: req.params.spotId
+         },
+         attributes: ['spotId', 'startDate', 'endDate']
+      })
+      bookingObj.Bookings = altBookings;
+   }
+
+   res.json(bookingObj)
 })
 
 module.exports = router;
