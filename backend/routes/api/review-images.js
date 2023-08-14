@@ -7,14 +7,14 @@ const { Review, ReviewImage } = require('../../db/models');
 router.delete('/:imageId', requireAuth, async (req, res) => {
    const userId = req.user.id;
    const reviewImage = await ReviewImage.findByPk(req.params.imageId);
+   const review = await Review.findByPk(reviewImage.reviewId)
 
    if (!reviewImage) {
       res.status(404);
       res.json({
-         "message": "Review Image couldn't be found"
+         "message": "Spot Image couldn't be found"
       })
    }
-   const review = await Review.findByPk(reviewImage.reviewId)
    if (review.userId == userId) {
       reviewImage.destroy()
       res.json({
