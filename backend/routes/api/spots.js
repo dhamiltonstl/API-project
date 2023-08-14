@@ -28,6 +28,7 @@ const validateSpot = [
       .withMessage('Longitude is not valid'),
    check('name')
       .exists({ checkFalsy: true })
+      .isLength({ max: 50 })
       .withMessage('Name must be less than 50 characters'),
    check('description')
       .exists({ checkFalsy: true })
@@ -42,12 +43,16 @@ const validateReview = [
    check('review')
       .exists({ checkFalsy: true })
       .withMessage('Review text is required'),
-   check('address')
+   check('stars')
       .exists({ checkFalsy: true })
+      .isInt({ gte: 1, lte: 5 })
       .withMessage('Stars must be an integer from 1 to 5')
 ];
 
 const validateBooking = [
+   check('startDate')
+      .exists({ checkFalsy: true })
+      .withMessage('startDate required'),
    check('endDate')
       .exists({ checkFalsy: true })
       .withMessage('endDate cannot be on or before startDate')
@@ -264,12 +269,32 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res) 
          "message": "Spot couldn't be found"
       })
    }
-   // const bookingPerSpot = await Booking.findOne({
-   //    where: {
-   //       spotId: spot.id,
+   const bookings = await Booking.findAll({
+      where: {
+         spotId: spot.id,
+      }
+   })
+   for (let booking of bookings) {
+      if (startDate >= booking.startDate && startDate <= booking.endDate) {
+         res.status(403);
+         res.json({
+            "message": "Sorry, this spot is already booked for the specified dates",
+            "errors": {
+               "startDate": "Start date conflicts with an existing booking",
+            }
+         });
+      }
+      if (endDate <= booking.endDate && endDate >= booking.startDate) {
+         res.status(403);
+         res.json({
+            "message": "Sorry, this spot is already booked for the specified dates",
+            "errors": {
+               "endDate": "End date conflicts with an existing booking",
+            }
+         })
+      }
+   }
 
-   //    }
-   // })
    if (spot.ownerId !== userId) {
       const booking = await Booking.create({
          spotId: spot.id,
