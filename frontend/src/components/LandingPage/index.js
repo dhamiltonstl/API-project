@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import SpotCard from './SpotCard'
 import { useDispatch } from 'react-redux'
 import { getSpots, getSingleSpot } from '../../store/spots'
-import { getReviews } from '../../store/reviews'
+import { getReviews, getSingleSpotReview } from '../../store/reviews'
+import { getBookings, getSingleSpotBookings } from '../../store/bookings'
 
 
 function SpotCardPage() {
@@ -18,6 +19,18 @@ function SpotCardPage() {
 
    useEffect(() => {
       dispatch(getReviews())
+   }, [dispatch])
+
+   useEffect(() => {
+      dispatch(getSingleSpotReview())
+   }, [dispatch])
+
+   useEffect(() => {
+      dispatch(getBookings())
+   }, [dispatch])
+
+   useEffect(() => {
+      dispatch(getSingleSpotBookings())
    }, [dispatch])
 
    return (

@@ -1,4 +1,4 @@
-// import { csrfFetch } from "./csrf";
+import { csrfFetch } from "./csrf";
 
 const initialState = {
    spot: {},
@@ -6,6 +6,7 @@ const initialState = {
 }
 
 const USER_REVIEWS = "reviews/userReviews"
+const SPOT_REVIEW = "reviews/spotReview"
 
 const userReviews = (reviews) => {
    return {
@@ -14,13 +15,31 @@ const userReviews = (reviews) => {
    }
 }
 
+const spotReview = (review) => {
+   return {
+      type: SPOT_REVIEW,
+      spot: review
+   }
+}
+
 export const getReviews = () => async (dispatch) => {
-   const res = await fetch("/api/reviews/current", {
+   const res = await csrfFetch("/api/reviews/current", {
       method: 'GET'
    });
    const data = await res.json();
 
    dispatch(userReviews({ ...data.Reviews }))
+   return res;
+}
+
+export const getSingleSpotReview = () => async (dispatch) => {
+
+   const res = await fetch(`/api/spots/1/reviews`, {
+      method: 'GET'
+   });
+   const data = await res.json();
+
+   dispatch(spotReview({ ...data }))
    return res;
 }
 
@@ -32,9 +51,9 @@ const reviewReducer = (state = initialState, action) => {
          newState = { ...state, user: { ...action.reviews } };
          return newState;
 
-      // case SINGLE_REVIEW:
-      //    newState = { ...state, singleSpot: { ...action.spot } }
-      //    return newState;
+      case SPOT_REVIEW:
+         newState = { ...state, spot: { ...action.spot } }
+         return newState;
       // case USER_SPOTS:
       //    newState
       //    return newState
