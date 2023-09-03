@@ -39,7 +39,7 @@ export const getSingleSpotReview = () => async (dispatch) => {
    });
    const data = await res.json();
 
-   dispatch(spotReview({ ...data }))
+   dispatch(spotReview({ ...data.Reviews }))
    return res;
 }
 

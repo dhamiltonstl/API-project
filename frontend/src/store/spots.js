@@ -42,9 +42,9 @@ export const getSpots = () => async (dispatch) => {
    return res;
 };
 
-export const getSingleSpot = () => async (dispatch) => {
-
-   const res = await fetch(`/api/spots/1`, {
+export const getSingleSpot = (spotId) => async (dispatch) => {
+   console.log('singleSpotFetch Hit')
+   const res = await fetch(`/api/spots/${spotId}`, {
       method: 'GET'
    });
    const data = await res.json();

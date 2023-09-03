@@ -39,7 +39,7 @@ export const getSingleSpotBookings = () => async (dispatch) => {
    });
    const data = await res.json();
 
-   dispatch(spotBookings({ ...data }))
+   dispatch(spotBookings({ ...data.Bookings }))
    return res;
 }
 

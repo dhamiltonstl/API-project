@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import SpotCard from './SpotCard'
-import { useDispatch } from 'react-redux'
-import { getSpots, getSingleSpot } from '../../store/spots'
-import { getReviews, getSingleSpotReview } from '../../store/reviews'
-import { getBookings, getSingleSpotBookings } from '../../store/bookings'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getSpots } from '../../store/spots'
+import './LandingPage.css';
 
 
 function SpotCardPage() {
@@ -13,30 +13,19 @@ function SpotCardPage() {
       dispatch(getSpots())
    }, [dispatch])
 
-   useEffect(() => {
-      dispatch(getSingleSpot())
-   }, [dispatch])
+   const allSpots = useSelector(state => state.spots.allSpots)
 
-   useEffect(() => {
-      dispatch(getReviews())
-   }, [dispatch])
-
-   useEffect(() => {
-      dispatch(getSingleSpotReview())
-   }, [dispatch])
-
-   useEffect(() => {
-      dispatch(getBookings())
-   }, [dispatch])
-
-   useEffect(() => {
-      dispatch(getSingleSpotBookings())
-   }, [dispatch])
+   const spotsArr = Object.values(allSpots)
 
    return (
-      <div>
-         <SpotCard />
-         to be mapped
+      <div className='spot-card-page'>
+
+         <div className='card-container'>
+            {spotsArr.map((spot) => (
+               <SpotCard className='spot-card' spot={spot} />
+            ))}
+         </div>
+
       </div>
    )
 }
