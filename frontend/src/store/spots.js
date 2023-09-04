@@ -43,7 +43,6 @@ export const getSpots = () => async (dispatch) => {
 };
 
 export const getSingleSpot = (spotId) => async (dispatch) => {
-   console.log('singleSpotFetch Hit')
    const res = await fetch(`/api/spots/${spotId}`, {
       method: 'GET'
    });
