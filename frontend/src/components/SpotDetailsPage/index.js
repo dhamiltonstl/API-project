@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getSingleSpot } from '../../store/spots'
 import './SpotDetailsPage.css'
 import ReservationButton from './ReserveButton'
+import SpotReviews from '../SpotReviews'
 
 function SpotDetailsPage() {
    const dispatch = useDispatch()
@@ -61,6 +62,7 @@ function SpotDetailsPage() {
                </div>
                <ReservationButton spot={spot} />
             </div>
+            <SpotReviews spot={spot} />
          </div>
       </div>
    )

@@ -32,9 +32,9 @@ export const getReviews = () => async (dispatch) => {
    return res;
 }
 
-export const getSingleSpotReview = () => async (dispatch) => {
+export const getSingleSpotReviews = (spotId) => async (dispatch) => {
 
-   const res = await fetch(`/api/spots/1/reviews`, {
+   const res = await fetch(`/api/spots/${spotId}/reviews`, {
       method: 'GET'
    });
    const data = await res.json();

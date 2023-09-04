@@ -19,7 +19,7 @@ function Navigation({ isLoaded }) {
 
             {isLoaded && (
                <li id='profile-button'>
-                  <Link exact to="/new-spot">
+                  <Link exact to="/spots">
                      Create a Spot
                   </Link>
                   <ProfileButton user={sessionUser} />

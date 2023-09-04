@@ -1,6 +1,7 @@
 .details-page {
    display: flex;
    justify-content: center;
+   margin-top: 30px;
 }
 
 .inner-page {
@@ -12,7 +13,7 @@
 .img-container {
    display: flex;
    gap: 5px;
-   margin-bottom: 50px;
+   margin-bottom: 30px;
 }
 
 .img-grid {
@@ -68,28 +69,57 @@
 .details-container {
    display: grid;
    grid-template-columns: 3fr 2fr;
+   border-bottom: 1px solid grey;
+   padding-bottom: 30px;
 }
 
 .reservation {
    display: grid;
    border: 1px solid grey;
    border-radius: 15px;
-   height: 100px;
+   height: fit-content;
+
    margin: 5px;
 }
 
 .res-price {
    display: flex;
-   align-items: end;
+   align-items: center;
+   gap: 5px;
 }
 
 .res-details {
    display: flex;
-   justify-content: space-around;
+   justify-content: space-between;
+   padding: 10px 30px 0px 30px;
+}
+
+.res-reviews {
+   display: flex;
+   align-items: center;
 }
 
 .res-button {
-   display: grid;
+   display: flex;
+   justify-content: center;
    align-items: center;
-   padding: 0 15px 15px 15px;
+   padding: 0px 30px 30px 30px;
+}
+
+#res-button {
+   width: 100%;
+   height: 35px;
+   background: red;
+   font-weight: bold;
+   color: white;
+   box-shadow: 2px 2px 4px grey;
+}
+
+#bullet {
+   margin-left: 5px;
+   margin-right: 5px;
+}
+
+.fa-star {
+   margin-right: 5px;
 }

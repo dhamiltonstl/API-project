@@ -9,12 +9,15 @@ function ReservationButton({ spot }) {
                <h2>{`$${spot.price}`}</h2>
                <h4>night</h4>
             </div>
-            <div></div>
-            <h4>{spot.avgRating !== 'NaN' ? spot.avgRating : 'New'}</h4>
-            <h4>{`${spot.numReviews} reviews`}</h4>
+            <div className="res-reviews">
+               <i class="fa-solid fa-star"></i>
+               <h4>{spot.avgRating !== 'NaN' ? spot.avgRating : 'New'}</h4>
+               <h4 id="bullet">&bull;</h4>
+               <h4>{`${spot.numReviews} reviews`}</h4>
+            </div>
          </div>
          <div className="res-button">
-            <button>Reserve</button>
+            <button id="res-button">Reserve</button>
          </div>
       </div>
    )

@@ -6,7 +6,7 @@ import { Switch, Link, Route } from 'react-router-dom'
 function SpotCard({ spot }) {
    return (
       <div className='spot-card' title={spot.name}>
-         <Link to={`/spot/${spot.id}`}>
+         <Link to={`/spots/${spot.id}`}>
 
             <img className='spot-img' src={spot.previewImage}></img>
             <div className='card-info'>

@@ -59,11 +59,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.DECIMAL(10, 7),
-      allowNull: false
+      // allowNull: false
     },
     lng: {
       type: DataTypes.DECIMAL(10, 7),
-      allowNull: false
+      // allowNull: false
     },
     name: {
       type: DataTypes.STRING(50),
