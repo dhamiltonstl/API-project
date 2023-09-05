@@ -213,14 +213,8 @@ router.post('', requireAuth, validateSpot, async (req, res) => {
    });
    await spot.save();
 
-   const newSpot = await Spot.findOne({
-      where: {
-         name: name
-      }
-   });
-
    res.status(201);
-   res.json(newSpot);
+   res.json(spot);
 });
 
 router.put('/:spotId', requireAuth, validateSpot, async (req, res) => {
@@ -334,7 +328,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
          userId: userId
       }
    })
-   console.log(reviewed)
+   // console.log(reviewed)
    if (reviewed.length) {
       res.status(403)
       res.json({

@@ -1,0 +1,50 @@
+.post-review-modal {
+   width: 350px;
+}
+
+.post-review-form {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   align-items: center;
+   margin: 0px 20px 20px 20px;
+}
+
+#review-submit-button {
+   background: red;
+   color: white;
+   font-weight: bold;
+   height: 30px;
+   width: 100%;
+   box-shadow: 1px 1px 1px grey;
+   border-radius: 5px;
+}
+
+#review-submit-button:hover {
+   box-shadow: 2px 2px 2px grey;
+   cursor: pointer;
+}
+
+#review-submit-button:active {
+   box-shadow: none;
+}
+
+#review {
+   width: 100%;
+   min-height: 100px;
+   resize: none;
+}
+
+.post-review-button {
+   list-style-type: none;
+}
+
+.stars {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.stars>h4 {
+   margin: 0;
+}

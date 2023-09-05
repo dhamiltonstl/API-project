@@ -44,31 +44,35 @@ function ProfileButton({ user }) {
       <>
          <button className="profile-button" onClick={openMenu}>
             <i className="fa-solid fa-bars fa-lg" />
-            <i class="fa-solid fa-circle-user fa-2x"></i>
+            <i class="fa-solid fa-circle-user fa-2xl"></i>
          </button>
          <ul className={ulClassName} ref={ulRef}>
             {user ? (
                <>
-                  <li>Hello, {user.username}</li>
+                  <li id="greeting">Hello, {user.username}</li>
                   <li>{user.email}</li>
+                  <li id="manage-link">
+                     <Link exact to="/spots/current" onClick={closeMenu}>Manage Spots</Link></li>
                   <li>
-                     <Link exact to="/spots/current">Manage Spots</Link></li>
-                  <li>
-                     <button onClick={logout}>Log Out</button>
+                     <button id="logout-button" onClick={logout}>Log Out</button>
                   </li>
                </>
             ) : (
                <>
-                  <OpenModalMenuItem
-                     itemText="Log In"
-                     onItemClick={closeMenu}
-                     modalComponent={<LoginFormModal />}
-                  />
-                  <OpenModalMenuItem
-                     itemText="Sign Up"
-                     onItemClick={closeMenu}
-                     modalComponent={<SignupFormModal />}
-                  />
+                  <li className="menu-item">
+                     <OpenModalMenuItem
+                        itemText="Log In"
+                        onItemClick={closeMenu}
+                        modalComponent={<LoginFormModal />}
+                     />
+                  </li>
+                  <li className="menu-item">
+                     <OpenModalMenuItem
+                        itemText="Sign Up"
+                        onItemClick={closeMenu}
+                        modalComponent={<SignupFormModal />}
+                     />
+                  </li>
                </>
             )}
          </ul>

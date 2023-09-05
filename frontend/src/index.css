@@ -7,3 +7,46 @@
 body {
    margin-top: 100px;
 }
+
+input {
+   background: rgb(205, 231, 255);
+}
+
+textarea {
+   background: rgb(205, 231, 255);
+   resize: none;
+   border: 2px solid grey;
+}
+
+a {
+   color: black;
+   text-decoration: none;
+}
+
+
+.landing-page {
+   display: flex;
+   justify-content: center;
+}
+
+#landing-page {
+   max-width: 1370px;
+}
+
+@media screen and (max-width: 1400px) {
+   #landing-page {
+      max-width: 1021px;
+   }
+}
+
+@media screen and (max-width: 1111px) {
+   #landing-page {
+      max-width: 674px;
+   }
+}
+
+@media screen and (max-width: 777px) {
+   #landing-page {
+      max-width: 325px;
+   }
+}

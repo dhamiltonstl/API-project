@@ -24,12 +24,22 @@ function LoginFormModal() {
          });
    };
 
+   const demoUser = (e) => {
+      e.preventDefault();
+      return dispatch(
+         sessionActions.login({
+            credential: "Demo-lition",
+            password: "password",
+         })
+      ).then(closeModal);
+   };
+
    return (
       <div className="login-modal">
          <h1>Log In</h1>
          <form onSubmit={handleSubmit}>
             <div className="login-form">
-               <div>
+               <div id="user-name">
                   <input
                      type="text"
                      value={credential}
@@ -38,7 +48,7 @@ function LoginFormModal() {
                      placeholder="Username or Email"
                   />
                </div>
-               <div>
+               <div id="password">
                   <input
                      type="password"
                      value={password}
@@ -49,14 +59,24 @@ function LoginFormModal() {
                </div>
                <div>
                   {errors.credential && (
-                     <p>{errors.credential}</p>
+                     <p id="error">{errors.credential}</p>
                   )}
                </div>
             </div>
-            <div id="submit-button">
-               <button type="submit">Log In</button>
+            <div className="submit-button">
+               <button
+                  id="submit-button"
+                  type="submit"
+                  disabled={credential.length < 4 || password.length < 6}
+               >Log In</button>
             </div>
          </form>
+         <h3
+            onClick={demoUser}
+            id="demo-login"
+         >
+            Demo User
+         </h3>
       </div >
    );
 }

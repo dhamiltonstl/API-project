@@ -1,7 +1,8 @@
 import React from "react";
 
 function ReservationButton({ spot }) {
-   console.log("spot: ", spot)
+
+
    return (
       <div className="reservation">
          <div className="res-details">
@@ -17,7 +18,7 @@ function ReservationButton({ spot }) {
             </div>
          </div>
          <div className="res-button">
-            <button id="res-button">Reserve</button>
+            <button id="res-button" onClick={() => alert("Feature coming soon!")}>Reserve</button>
          </div>
       </div>
    )

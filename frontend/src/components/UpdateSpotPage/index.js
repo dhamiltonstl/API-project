@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import './CreateSpotPage.css'
 import { useDispatch, useSelector } from "react-redux";
-import { createSpotImg, createUserSpot, getSingleSpot } from "../../store/spots";
-import { useHistory } from "react-router-dom";
+import { createSpotImg, updateUserSpot, getSingleSpot } from "../../store/spots";
+import { useParams } from "react-router-dom";
 
-function CreateSpotPage() {
+
+function UpdateSpotPage() {
    const dispatch = useDispatch()
+   const params = useParams()
 
    const [country, setCountry] = useState("")
    const [state, setState] = useState("")
@@ -16,23 +17,14 @@ function CreateSpotPage() {
    const [price, setPrice] = useState(null)
    const [previewImgUrl, setPreviewImgUrl] = useState("")
    const [imgUrls, setImgUrls] = useState([])
-   const [errors, setErrors] = useState({})
-   const [desError, setDesError] = useState({})
-   const [nameError, setNameError] = useState({})
-   const [previewImg, setPreviewImg] = useState({})
-   const [img1, setImg1] = useState({})
-   const [img2, setImg2] = useState({})
-   const [img3, setImg3] = useState({})
-   const [img4, setImg4] = useState({})
-   const history = useHistory()
 
-   let spotRes
+   const spot = useSelector((state) => state.spots.singleSpot)
 
-   const handleSubmit = async (e) => {
+   const handleSubmit = (e) => {
       e.preventDefault()
 
-
       const data = {
+         spotId: params.spotId,
          country,
          state,
          city,
@@ -42,7 +34,7 @@ function CreateSpotPage() {
          price
       }
 
-      const imgArr = [
+      const imgData = [
          {
             url: previewImgUrl,
             preview: true
@@ -64,56 +56,45 @@ function CreateSpotPage() {
             preview: false
          }
       ]
+      // console.log(imgData)
 
-
-      if (description && description.length < 30) {
-         setDesError({
-            description: "Description needs a minimum of 30 characters"
-         })
-      }
-      if (!description) {
-         setDesError({
-            description: "Description is required"
-         })
-      }
-      if (!name) {
-         setNameError({
-            name: "Name is required"
-         })
-      }
-
-      await dispatch(createUserSpot(data, imgArr))
-         .catch(async (res) => {
-            const data = await res.json()
-            if (data && data.errors) {
-               setErrors(data.errors)
-            }
-         })
-      const spotId = spotRes.id
-      history.push(`/api/spots/${spotId}`)
+      dispatch(updateUserSpot(data))
 
    }
+
    useEffect(() => {
-      dispatch(getSingleSpot(spotRes))
-   }, [dispatch,])
+      dispatch(getSingleSpot(params.spotId))
+   }, [dispatch])
+
+   useEffect(() => {
+      if (!spot) {
+         console.log("Spot not found")
+      } else {
+         setCountry(spot.country)
+         setAddress(spot.address)
+         setCity(spot.city)
+         setState(spot.state)
+         setDescription(spot.description)
+         setName(spot.name)
+         setPrice(spot.price)
+      }
+   }, [spot])
 
    return (
       <div className="new-spot-page">
          <div className="form-container">
             <form onSubmit={handleSubmit}>
                <div className="address">
-                  <h2>Create a New Spot</h2>
+                  <h2>Update your Spot</h2>
                   <h4>Where is your spot located?</h4>
                   <p>Guests will only get your exact address once they book a reservation.</p>
                   <input
                      value={country}
                      onChange={(e) => setCountry(e.target.value)}
+                     required
                      type="text"
                      placeholder="Country"
                   />
-                  {errors.country && (
-                     <p id="error">{errors.country}</p>
-                  )}
                   <input
                      id="address"
                      value={address}
@@ -121,9 +102,6 @@ function CreateSpotPage() {
                      type="text"
                      placeholder="Address"
                   />
-                  {errors.address && (
-                     <p id="error">{errors.address}</p>
-                  )}
                   <div className="city-state">
                      <input
                         id="city"
@@ -141,14 +119,6 @@ function CreateSpotPage() {
                         placeholder="State"
                      />
                   </div>
-                  <div className="city-state-errors">
-                     {errors.city && (
-                        <p id="error">{errors.city}</p>
-                     )}
-                     {errors.state && (
-                        <p id="error">{errors.state}</p>
-                     )}
-                  </div>
                </div>
                <div className="description">
                   <h4>Describe your place to guest</h4>
@@ -156,14 +126,10 @@ function CreateSpotPage() {
                   <div className="discription-container">
                      <textArea
                         id="description"
-                        value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Please write at least 30 characters"
-                     />
+                     >{description}</textArea>
                   </div>
-                  {desError.description && (
-                     <p id="error">{desError.description}</p>
-                  )}
                </div>
                <div className="title">
                   <h4>Create a title for your spot</h4>
@@ -177,9 +143,6 @@ function CreateSpotPage() {
                         placeholder="Name of your spot"
                      />
                   </div>
-                  {nameError.name && (
-                     <p id="error">{nameError.name}</p>
-                  )}
                </div>
                <div className="price">
                   <h4>Set a base price for your spot</h4>
@@ -194,55 +157,11 @@ function CreateSpotPage() {
                         placeholder="Price per night (USD)"
                      />
                   </div>
-                  {errors.price && (
-                     <p id="error">{errors.price}</p>
-                  )}
                </div>
-               <div className="photos">
-                  <h4>Liven up your spot with photos</h4>
-                  <p>Submit a link to at least one photo to publish your spot.</p>
-                  <div className="url-input-container">
-                     <input
-                        className="url-input"
-                        // value={previewImgUrl}
-                        onChange={(e) => setPreviewImgUrl(e.target.value)}
-                        type="text"
-                        placeholder="Preview Image URL"
-                     />
-                     <input
-                        className="url-input"
-                        // value={img1}
-                        onChange={(e) => setImgUrls([...imgUrls, e.target.value])}
-                        type="text"
-                        placeholder="Image URL"
-                     />
-                     <input
-                        className="url-input"
-                        // value={img2}
-                        onChange={(e) => setImgUrls([...imgUrls, e.target.value])}
-                        type="text"
-                        placeholder="Image URL"
-                     />
-                     <input
-                        className="url-input"
-                        // value={img3}
-                        onChange={(e) => setImgUrls([...imgUrls, e.target.value])}
-                        type="text"
-                        placeholder="Image URL"
-                     />
-                     <input
-                        className="url-input"
-                        // value={img4}
-                        onChange={(e) => setImgUrls([...imgUrls, e.target.value])}
-                        type="text"
-                        placeholder="Image URL"
-                     />
-                  </div>
-               </div>
-               <button id="submit-button" type="submit">Create Spot</button>
+               <button id="submit-button" type="submit">Update Spot</button>
             </form>
          </div>
       </div>
    )
 }
-export default CreateSpotPage;
+export default UpdateSpotPage;

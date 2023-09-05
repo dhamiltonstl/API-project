@@ -7,7 +7,7 @@
 .inner-page {
    display: flex;
    flex-direction: column;
-   width: 1120px;
+   width: 1000px;
 }
 
 .img-container {
@@ -30,38 +30,38 @@
 
 #preview-image {
    grid-area: pre;
-   width: 560px;
-   height: 453px;
+   width: 495px;
+   height: 400px;
    object-fit: cover;
    border-radius: 15px 0 0 15px;
 }
 
 #img-1 {
    grid-area: img1;
-   width: 272px;
-   height: 224px;
+   width: 247px;
+   height: 198px;
    object-fit: cover;
 }
 
 #img-2 {
    grid-area: img2;
-   width: 272px;
-   height: 224px;
+   width: 247px;
+   height: 198px;
    object-fit: cover;
    border-radius: 0 15px 0 0;
 }
 
 #img-3 {
    grid-area: img3;
-   width: 272px;
-   height: 224px;
+   width: 247px;
+   height: 198px;
    object-fit: cover;
 }
 
 #img-4 {
    grid-area: img4;
-   width: 272px;
-   height: 224px;
+   width: 247px;
+   height: 198px;
    object-fit: cover;
    border-radius: 0 0 15px 0;
 }
@@ -78,7 +78,7 @@
    border: 1px solid grey;
    border-radius: 15px;
    height: fit-content;
-
+   box-shadow: 1px 1px 2px grey;
    margin: 5px;
 }
 
@@ -112,7 +112,17 @@
    background: red;
    font-weight: bold;
    color: white;
-   box-shadow: 2px 2px 4px grey;
+   border-radius: 5px;
+   box-shadow: 1px 1px 1px grey;
+}
+
+#res-button:hover {
+   cursor: pointer;
+   box-shadow: 2px 2px 2px grey;
+}
+
+#res-button:active {
+   box-shadow: none;
 }
 
 #bullet {

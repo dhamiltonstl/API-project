@@ -3,13 +3,19 @@
 }
 
 .profile-dropdown {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 5px;
    list-style-type: none;
-   border: 1px solid grey;
+   border: 2px solid grey;
    background: white;
    position: fixed;
    top: 61px;
-   right: 20px;
+   right: 50px;
    z-index: 1;
+   padding: 10px;
+   border-radius: 15px 0px 15px 15px;
 }
 
 .nav {
@@ -42,6 +48,7 @@
    padding: 5px 5px 5px 12px;
    border-radius: 40px;
    margin-left: 15px;
+   background: white;
 }
 
 #profile-button {
@@ -50,7 +57,52 @@
    margin-right: 15px;
 }
 
+.profile-button:hover {
+   background: rgb(238, 238, 238);
+   cursor: pointer;
+}
+
 .logo {
    width: 100px;
    margin-left: 15px;
+}
+
+#manage-link {
+   border-top: 1px solid grey;
+   border-bottom: 1px solid grey;
+   padding-top: 3px;
+   padding-bottom: 5px;
+}
+
+#manage-link:hover {
+   background: rgb(238, 238, 238);
+   cursor: pointer;
+}
+
+#greeting {
+   font-weight: bold;
+}
+
+#logout-button {
+   border-radius: 15px;
+   font-weight: bold;
+   margin-top: 5px;
+   padding: 5px;
+   background: white;
+}
+
+#logout-button:hover {
+   background: rgb(238, 238, 238);
+   cursor: pointer;
+}
+
+.menu-item {
+   width: 100%;
+   padding: 0px 5px;
+   border-radius: 10px;
+}
+
+.menu-item:hover {
+   background: rgb(238, 238, 238);
+   cursor: pointer;
 }

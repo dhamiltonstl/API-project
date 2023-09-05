@@ -7,6 +7,7 @@ import LandingPage from "./components/LandingPage";
 import SpotDetailsPage from "./components/SpotDetailsPage";
 import CreateSpotPage from "./components/CreatSpotPage";
 import ManageSpotsPage from "./components/ManageSpotsPage";
+import UpdateSpotPage from "./components/UpdateSpotPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,13 +22,20 @@ function App() {
       {isLoaded &&
         <Switch>
           <Route exact path="/">
-            <LandingPage />
+            <div className="landing-page">
+              <div id="landing-page">
+                <LandingPage />
+              </div>
+            </div>
           </Route>
           <Route exact path="/spots">
             <CreateSpotPage />
           </Route>
           <Route exact path="/spots/current">
             <ManageSpotsPage />
+          </Route>
+          <Route exact path="/spots/:spotId/edit">
+            <UpdateSpotPage />
           </Route>
           <Route exact path="/spots/:spotId">
             <SpotDetailsPage />

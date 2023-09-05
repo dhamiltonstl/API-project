@@ -6,3 +6,97 @@
 .form-container {
    width: 400px;
 }
+
+.address {
+   display: flex;
+   flex-direction: column;
+   border-bottom: 1px solid grey;
+}
+
+.city-state {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+
+#city {
+   width: 250px;
+}
+
+#comma {
+   margin-top: 10px;
+   margin-right: 15px;
+   margin-left: 3px;
+}
+
+#state {
+   width: 125px;
+}
+
+#address {
+   margin-bottom: 5px;
+}
+
+.description {
+   border-bottom: 1px solid grey;
+}
+
+.discription-container {
+   display: flex;
+   align-items: center;
+}
+
+#description {
+   width: 100%;
+   height: 100px;
+   margin-bottom: 15px;
+}
+
+.title {
+   border-bottom: 1px solid grey;
+}
+
+.name-container {
+   display: flex;
+   align-items: center;
+}
+
+#name,
+#price {
+   width: 100%;
+}
+
+.price-container {
+   display: flex;
+   align-items: center;
+}
+
+.price {
+   border-bottom: 1px solid grey;
+}
+
+#dollar-sign {
+   margin-top: 5px;
+   margin-right: 3px;
+}
+
+.url-input-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.url-input {
+   margin-left: 5px;
+   width: 98%;
+   padding: 0 2px
+}
+
+#error {
+   color: red;
+}
+
+.city-state-errors {
+   display: flex;
+   justify-content: space-between;
+}

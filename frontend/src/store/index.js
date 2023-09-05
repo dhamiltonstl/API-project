@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
    session: sessionReducer,
    spots: spotReducer,
    reviews: reviewReducer,
-   bookings: bookingReducer
+   // bookings: bookingReducer
 });
 
 let enhancer;
