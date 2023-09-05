@@ -42,3 +42,21 @@
    align-items: center;
    padding: 0 30px 30px 30px;
 }
+
+.manage-buttons {
+   display: flex;
+   align-items: center;
+   gap: 30px;
+   margin-top: 15px;
+}
+
+.delete-button {
+   list-style-type: none;
+}
+
+.card-container {
+   display: flex;
+   flex-wrap: wrap;
+   max-block-size: 1550px;
+   gap: 20px;
+}

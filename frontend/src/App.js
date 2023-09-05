@@ -32,7 +32,11 @@ function App() {
             <CreateSpotPage />
           </Route>
           <Route exact path="/spots/current">
-            <ManageSpotsPage />
+            <div className="landing-page">
+              <div id="landing-page">
+                <ManageSpotsPage />
+              </div>
+            </div>
           </Route>
           <Route exact path="/spots/:spotId/edit">
             <UpdateSpotPage />

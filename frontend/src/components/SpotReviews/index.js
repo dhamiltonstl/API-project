@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import PostReviewModal from "../PostReviewModal";
+import DeleteReviewModal from "../DeleteReviewModal";
 
 function SpotReviews({ spot }) {
    const dispatch = useDispatch()
@@ -79,6 +80,10 @@ function SpotReviews({ spot }) {
                   <h4>{review.User.firstName}</h4>
                   {getDate(review)}
                   <p>{review.review}</p>
+                  <button id="delete-button"><OpenModalMenuItem
+                     itemText="Delete"
+                     modalComponent={<DeleteReviewModal review={review} />}
+                  /></button>
                </div>
             )
          })}

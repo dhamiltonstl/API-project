@@ -29,7 +29,7 @@ function ManageSpotsPage() {
             {spotsArr.map((spot) => (
                <div>
                   <SpotCard className='spot-card' spot={spot} />
-                  <div>
+                  <div className="manage-buttons">
                      <Link to={`/spots/${spot.id}/edit`}>
                         <button>Update</button>
                      </Link>

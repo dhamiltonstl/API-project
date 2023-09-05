@@ -8,6 +8,7 @@ const initialState = {
 const USER_REVIEWS = "reviews/userReviews"
 const SPOT_REVIEW = "reviews/spotReview"
 const CREATE_REVIEW = "reviews/createReview"
+const DELETE_REVIEW = "reviews/deleteReview"
 
 const userReviews = (reviews) => {
    return {
@@ -26,6 +27,13 @@ const spotReview = (review) => {
 const createReview = (review) => {
    return {
       type: CREATE_REVIEW,
+      review: review
+   }
+}
+
+const deleteReview = (review) => {
+   return {
+      type: DELETE_REVIEW,
       review: review
    }
 }
@@ -69,6 +77,15 @@ export const createSpotReview = (spotReview) => async (dispatch) => {
    return data
 }
 
+export const deleteUserReview = (review) => async (dispatch) => {
+   const reviewId = review.id
+   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+      method: 'DELETE'
+   })
+   const data = await res.json()
+   return data
+}
+
 const reviewReducer = (state = initialState, action) => {
    let newState;
    switch (action.type) {
@@ -82,6 +99,10 @@ const reviewReducer = (state = initialState, action) => {
          return newState;
       case CREATE_REVIEW:
          newState = { ...state, spot: { ...action.review } }
+      case DELETE_REVIEW:
+         newState = { ...state, user: { ...state.reviews } }
+         delete newState.user[action.review]
+         return newState
       default:
          return state
    }

@@ -133,3 +133,7 @@
 .fa-star {
    margin-right: 5px;
 }
+
+#delete-button {
+   list-style-type: none;
+}
